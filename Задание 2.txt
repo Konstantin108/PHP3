@@ -1,0 +1,81 @@
+<?php
+
+function check($num)
+{
+
+	for($i = 2; $i <= $num; $i++){
+		$flag = true;
+		for($k = 2; $k <= $i/2; $k++)
+			if($i % $k == 0) $flag = false;
+			if($flag)
+				$simple[] = $i;
+	}
+	var_dump($simple);
+}
+check(15);
+
+$newNum = 15;
+$arr = [];
+
+for($i = 1; $i <= $newNum; $i++){
+  $arr[] = $newNum / $i;
+}
+echo '<pre>';
+var_dump($arr);
+
+
+
+
+
+//function gutNum($newNum2){
+	//if(preg_match('/^\+?\d+$/', $newNum2)){
+			//echo $newNum2 . ' - целое положительное число' . '<br><br>';
+		//}else{
+			//echo 'плохое число' . '<br><br>';
+		//}
+//}
+
+//gutNum(3);
+
+function gutNumFromArray($numFromArray){
+	for($i = 0; $i < count($numFromArray); $i++){
+	if(preg_match('/^\+?\d+$/', $numFromArray[$i])){
+			echo $numFromArray[$i] . ' - целое положительное число' . '<br><br>';
+
+
+			for($k = 2; $k <= $numFromArray[$i]; $k++){
+				$flag = true;
+				for($j = 2; $j < $k/2; $j++)
+						if($k % $j == 0)
+							$flag = false;
+						if($flag)
+							$simple2[] = $j;
+					}
+				var_dump($simple2);
+
+		}else{
+
+				echo 'плохое число' . '<br><br>';
+			}
+
+
+
+
+	}
+}
+
+gutNumFromArray($arr);
+
+
+//$simple = array();
+//
+//for ($i = 2; $i <= 100; $i++)
+//{
+    //$flag = true;
+    //for ($j = 2; $j <= $i/2; $j++)
+        //if( $i % $j == 0)
+            //$flag = false;
+    //if($flag)
+        //$simple[] = $i;
+//}
+//var_dump($simple);
