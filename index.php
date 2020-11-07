@@ -1,112 +1,68 @@
 <?php
 
-$myFile = fopen('sum.txt', "r");
-
-if ($myFile) {
-   while (!feof($myFile)) {
-       $lines[] = fgets($myFile);
-   }
-   fclose($myFile);
-}
-
-$numBeforeFix1 = strrev($lines[0]);
-$num2 = strrev($lines[1]);
-
-$num1 = substr($numBeforeFix1, 2);
-
-$arr1 = str_split($num1, 1);
-$arr2 = str_split($num2, 1);
-
-
-function sum(&$array1, &$array2){
-    $sumArr = [];
-    for($i = 0; $i < count($array1); $i++){
-        //echo $array1[$i] . ' - array1 ' . '<br><br>';
-
-        //echo $array2[$i] . ' - array2 ' . '<br><br>';
-
-        $sum = $array1[$i] + $array2[$i];
-
-        echo $sum . ' - sum ' . '<br><br>';
-
-        $sumArr[] = $sum;
-
+function getData($file){     //<-- функция для прочтения файла
+    $myFile = fopen($file, "r");
+    if ($myFile) {
+       while (!feof($myFile)) {
+           $lines[] = fgets($myFile);
+       }
+       fclose($myFile);
     }
-    echo '<pre>';
-
-    var_dump($sumArr);
-    return $sumArr;
+    return $lines;
 }
 
-//sum($arr1, $arr2);
+$data = getData('sum.txt');     //<-- файл, из которого получаем числа
 
-$arrBeforeFix = sum($arr1, $arr2);
+function getRes(&$data){
 
-function fixArr(&$arr){
-    $fixArr = [];
-    for($j = 0; $j < count($arr); $j++){
-        if($arr[$j] > 9){
+    $num1 = trim($data[0]);
+    $num2 = trim($data[1]);
 
+    echo 'первое число: ' . $num1 . '<br>';
+    echo 'второе число: ' . $num2;
 
-            $n = (string)$arr[$j];
-            $nFix = substr($n, 1);
-            $nFixInt = (int)$nFix;
-            echo $nFixInt;
+    $maxLen = max(strlen($num1), strlen($num2));
+    $num1 = str_pad($num1, $maxLen, '0', 0);
+    $num2 = str_pad($num2, $maxLen, '0', 0);
 
+    $result = '';
+    $inMind = 0;
 
+    for ($i = $maxLen - 1; $i >= 0; $i--) {
+        $x1 = (int)$num1[$i];
+        $x2 = (int)$num2[$i];
 
-            //$n = $arr[$j] - 10;
-            $fixArr[] = $nFixInt;
+        $sum = $x1 + $x2;
+        $sumFinal = $sum + $inMind;
 
-            //$temp = 1;
-            $nextJ = $arr[$j + 1] + 1;
-
-
-             $nJ = (string)$nextJ;
-            $nJFix = substr($nJ, 1);
-            $nJFixInt = (int)$nJFix;
-
-            if($nJFixInt == 0){
-                $nJFixInt = 1;
-            }
-
-            echo $nJFixInt;
-            //echo $n;
-            $fixArr[] = $nJFixInt;
-
-            //$nextJForDel = $arr[$j + 2];
-
-            array_splice($arr, 1, 1);
+        if ($sumFinal > 9) {
+            $inMind = 1;
+            $sumFinal %= 10;
         }else{
-            $fixArr[] = $arr[$j];
+            $inMind = 0;
         }
 
-        //echo $arr[$j];
+        $result = $sumFinal . $result;
     }
-    var_dump($fixArr);
-    return $fixArr;
-    //echo '<pre>';
-    //var_dump($arr);
+    if ($inMind>0){
+        $result = $inMind . $result;
+
+    }
+    return $result;
 }
 
-$arrForRev = fixArr($arrBeforeFix);
+$res = getRes($data);
 
-function result(&$arr){
-    return array_reverse($arr);
-}
+function displayRes(&$res, &$data){
+    $myFile = fopen('sum1.txt', "r+");
 
-$res = result($arrForRev);
+    $result = "\n" . $res;
 
-function displayRes(&$res){
-    $myFile = fopen('sum.txt', "r+");
-    $rez = implode('', $res);
-
-    $rezForW = "\n" . $rez;
-
-    //$rez = "\nsdfdsf";
-    fseek($myFile, 0, SEEK_END);
-    fwrite($myFile, $rezForW);
+    fseek($myFile, 40);
+    fwrite($myFile, $result);
     fclose($myFile);
+
+    echo '<br>' . 'результат вычисления: ' . $res . ' - результат записан в файл sum.txt';
 }
 
-displayRes($res);
+displayRes($res, $data);
