@@ -53,7 +53,7 @@ function getRes(&$data){
 
 $res = getRes($data);
 
-function displayRes(&$res, &$data){
+function displayRes(&$res, &$data){     //<-- функция для записи результата в файл
     $myFile = fopen('sum1.txt', "r+");
 
     $result = "\n" . $res;
