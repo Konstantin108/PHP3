@@ -53,16 +53,19 @@ function getRes(&$data){
 
 $res = getRes($data);
 
-function displayRes(&$res, &$data){     //<-- функция для записи результата в файл
-    $myFile = fopen('sum1.txt', "r+");
+function displayRes(&$res){     //<-- функция для записи результата в файл
 
-    $result = "\n" . $res;
+        $myFile = fopen('sum.txt', "r+");
+        $result = "\n" . $res;
 
-    fseek($myFile, 40);
-    fwrite($myFile, $result);
-    fclose($myFile);
+        fseek($myFile, 0, SEEK_END);
+        fwrite($myFile, $result);
+        fclose($myFile);
 
-    echo '<br>' . 'результат вычисления: ' . $res . ' - результат записан в файл sum.txt';
+        echo '<br>' . 'результат вычисления: ' . $res . ' - результат записан в файл sum.txt' . '<br>';
+
+
 }
 
-displayRes($res, $data);
+displayRes($res);
+
